@@ -43,7 +43,8 @@ public class AltVaadinUI extends UI{
 		VerticalLayout mainLayout = new VerticalLayout(actions, grid, editor);
 		setContent(mainLayout);
 	
-		grid.setHeight(300, Unit.PIXELS);
+		grid.setHeight(600, Unit.PIXELS);
+		grid.setWidth(1200, Unit.PIXELS);
 		grid.setColumns("shelfName", "hasValueMetal","partDescription","partNumber","wHNumber","quantity","bKQuantity","missingQuantity","placeOfInstallation");
 
 		filter.setPlaceholder("Filter by part number");
@@ -60,7 +61,7 @@ public class AltVaadinUI extends UI{
 		});
 
 		// Instantiate and edit new Customer the new button is clicked
-		addNewBtn.addClickListener(e -> editor.editCentralWareHouse(new CentralWareHouse("", new Boolean(false), "", "", "", new Integer(0), new Integer(0),new Integer(0), "")));
+		addNewBtn.addClickListener(e -> editor.editCentralWareHouse(new CentralWareHouse("","", "", "", "", "", "","", "")));
 
 		// Listen changes made by the editor, refresh data from backend
 		editor.setChangeHandler(() -> {

@@ -9,7 +9,7 @@ public class CentralWareHouse {
 	
 	private String shelfName;
 	
-	private Boolean hasValueMetal;
+	private String valueMetal;
 	
 	private String partDescription;
 	
@@ -17,22 +17,22 @@ public class CentralWareHouse {
 	
 	private String wHNumber;
 	
-	private Integer quantity;
+	private String quantity;
 	
-	private Integer bKQuantity;
+	private String bKQuantity;
 	
-	private Integer missingQuantity;
+	private String missingQuantity;
 	
 	private String placeOfInstallation;
 
 	public CentralWareHouse() {
 	}
 
-	public CentralWareHouse(String shelfName, Boolean hasValueMetal, String partDescription, String partNumber,
-			String wHNumber, Integer quantity, Integer bKQuantity, Integer missingQuantity,
+	public CentralWareHouse(String shelfName, String hasValueMetal, String partDescription, String partNumber,
+			String wHNumber, String quantity, String bKQuantity, String missingQuantity,
 			String placeOfInstallation) {
 		this.shelfName = shelfName;
-		this.hasValueMetal = hasValueMetal;
+		this.valueMetal = hasValueMetal;
 		this.partDescription = partDescription;
 		this.partNumber = partNumber;
 		this.wHNumber = wHNumber;
@@ -44,7 +44,7 @@ public class CentralWareHouse {
 
 	@Override
 	public String toString() {
-		return "CentralWareHouse [shelfName=" + shelfName + ", hasValueMetal=" + hasValueMetal + ", partDescription="
+		return "CentralWareHouse [shelfName=" + shelfName + ", hasValueMetal=" + valueMetal + ", partDescription="
 				+ partDescription + ", partNumber=" + partNumber + ", vHNumber=" + wHNumber + ", quantity=" + quantity
 				+ ", bKQuantity=" + bKQuantity + ", missingQuantity=" + missingQuantity + ", placeOfInstallation="
 				+ placeOfInstallation + "]";
@@ -57,6 +57,92 @@ public class CentralWareHouse {
 	public void setId(String id) {
 		this.id = id;
 	}
+
+	public String getShelfName() {
+		return shelfName;
+	}
+
+	public void setShelfName(String shelfName) {
+		this.shelfName = shelfName;
+	}
+
+
+
+	public String getHasValueMetal() {
+		return valueMetal;
+	}
+
+	public void setHasValueMetal(String hasValueMetal) {
+		this.valueMetal = hasValueMetal;
+	}
+
+	public String getPartDescription() {
+		return partDescription;
+	}
+
+	public void setPartDescription(String partDescription) {
+		this.partDescription = partDescription;
+	}
+
+	public String getPartNumber() {
+		return partNumber;
+	}
+
+	public void setPartNumber(String partNumber) {
+		this.partNumber = partNumber;
+	}
+
+	public String getwHNumber() {
+		return wHNumber;
+	}
+
+	public void setwHNumber(String wHNumber) {
+		this.wHNumber = wHNumber;
+	}
+
+	
+
+	public String getValueMetal() {
+		return valueMetal;
+	}
+
+	public void setValueMetal(String valueMetal) {
+		this.valueMetal = valueMetal;
+	}
+
+	public String getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(String quantity) {
+		this.quantity = quantity;
+	}
+
+	public String getbKQuantity() {
+		return bKQuantity;
+	}
+
+	public void setbKQuantity(String bKQuantity) {
+		this.bKQuantity = bKQuantity;
+	}
+
+	public String getMissingQuantity() {
+		return missingQuantity;
+	}
+
+	public void setMissingQuantity(String missingQuantity) {
+		this.missingQuantity = missingQuantity;
+	}
+
+	public String getPlaceOfInstallation() {
+		return placeOfInstallation;
+	}
+
+	public void setPlaceOfInstallation(String placeOfInstallation) {
+		this.placeOfInstallation = placeOfInstallation;
+	}
+	
+	
 
 
 	
