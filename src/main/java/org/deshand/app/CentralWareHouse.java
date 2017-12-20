@@ -1,4 +1,4 @@
-package org.deshand.model;
+package org.deshand.app;
 
 import org.springframework.data.annotation.Id;
 

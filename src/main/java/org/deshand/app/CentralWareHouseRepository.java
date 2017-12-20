@@ -1,11 +1,15 @@
-package org.deshand.repo;
+package org.deshand.app;
 
-import org.deshand.model.CentralWareHouse;
+import java.util.Collection;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface CentralWareHouseRepository extends MongoRepository<CentralWareHouse, Long>{
 
 	CentralWareHouse findById(String id);
 
+	Collection<CentralWareHouse> findByPartNumberStartsWithIgnoreCase(String filterText);
+
 }
+
 

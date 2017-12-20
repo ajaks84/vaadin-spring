@@ -1,20 +1,21 @@
-package editor;
+package org.deshand.app;
 
-import org.deshand.model.CentralWareHouse;
-import org.deshand.repo.CentralWareHouseRepository;
+import org.deshand.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.Binder;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.spring.annotation.SpringComponent;
+import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
-//@SpringComponent
-//@UIScope
+@SpringComponent
+@UIScope
 public class CentralWareHouseEditor extends VerticalLayout{
 
 	private static final long serialVersionUID = -696429844354467905L;
@@ -41,12 +42,13 @@ public class CentralWareHouseEditor extends VerticalLayout{
 	CssLayout actions = new CssLayout(save, cancel, delete);
 
 	Binder<CentralWareHouse> binder = new Binder<>(CentralWareHouse.class);
+//	Binder<Customer> binder = new Binder<>(Customer.class);
 	
 	@Autowired
 	public CentralWareHouseEditor(CentralWareHouseRepository repository) {
 		this.repository = repository;
 
-		addComponents(shelfName, hasValueMetal,partDescription,partNumber,wHNumber,quantity,bKQuantity,missingQuantity,placeOfInstallation, actions);
+		addComponents(shelfName, hasValueMetal, partDescription, partNumber, wHNumber, quantity, bKQuantity, missingQuantity, placeOfInstallation, actions);
 
 		// bind using naming convention
 		binder.bindInstanceFields(this);
@@ -94,6 +96,13 @@ public class CentralWareHouseEditor extends VerticalLayout{
 		save.focus();
 		// Select all text in firstName field automatically
 		partDescription.selectAll();
+	}
+	
+	public void setChangeHandler(ChangeHandler h) {
+		// ChangeHandler is notified when either save or delete
+		// is clicked
+		save.addClickListener(e -> h.onChange());
+		delete.addClickListener(e -> h.onChange());
 	}
 
 
