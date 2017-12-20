@@ -42,10 +42,12 @@ public class CentralWareHouse {
 		this.placeOfInstallation = placeOfInstallation;
 	}
 
+	
+
 	@Override
 	public String toString() {
-		return "CentralWareHouse [shelfName=" + shelfName + ", hasValueMetal=" + valueMetal + ", partDescription="
-				+ partDescription + ", partNumber=" + partNumber + ", vHNumber=" + wHNumber + ", quantity=" + quantity
+		return "CentralWareHouse [shelfName=" + shelfName + ", valueMetal=" + valueMetal + ", partDescription="
+				+ partDescription + ", partNumber=" + partNumber + ", wHNumber=" + wHNumber + ", quantity=" + quantity
 				+ ", bKQuantity=" + bKQuantity + ", missingQuantity=" + missingQuantity + ", placeOfInstallation="
 				+ placeOfInstallation + "]";
 	}

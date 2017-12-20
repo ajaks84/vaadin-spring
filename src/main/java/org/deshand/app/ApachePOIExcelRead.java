@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.Cell;
@@ -11,49 +12,131 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 
 @Component
 public class ApachePOIExcelRead {
 
-    private static final String FILE_NAME = "h:/CentralWarehouse.xlsx";
+	private final String FILE_NAME = "d:/CentralWarehouse.xlsx";
+	// private final String FILE_NAME = "d:/MyFirstExcel.xlsx";
+	
+	@Autowired
+	CentralWareHouseRepository repository;
 
-    public static void main(String[] args) {
+	@SuppressWarnings("deprecation")
+	public void readExcel() {
 
-        try {
+		try {
 
-            FileInputStream excelFile = new FileInputStream(new File(FILE_NAME));
-            Workbook workbook = new XSSFWorkbook(excelFile);
-            Sheet datatypeSheet = workbook.getSheetAt(0);
-            Iterator<Row> iterator = datatypeSheet.iterator();
+			FileInputStream excelFile = new FileInputStream(new File(FILE_NAME));
+			Workbook workbook = new XSSFWorkbook(excelFile);
+			Sheet datatypeSheet = workbook.getSheetAt(0);
+			Iterator<Row> iterator = datatypeSheet.iterator();
 
-            while (iterator.hasNext()) {
+			while (iterator.hasNext()) {
 
-                Row currentRow = iterator.next();
-                Iterator<Cell> cellIterator = currentRow.iterator();
+				Row currentRow = iterator.next();
+				Iterator<Cell> cellIterator = currentRow.iterator();
 
-                while (cellIterator.hasNext()) {
+				while (cellIterator.hasNext()) {
 
-                    Cell currentCell = cellIterator.next();
-                    //getCellTypeEnum shown as deprecated for version 3.15
-                    //getCellTypeEnum ill be renamed to getCellType starting from version 4.0
-                    if (currentCell.getCellTypeEnum() == CellType.STRING) {
-                        System.out.print(currentCell.getStringCellValue() + "--");
-                    } else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
-                        System.out.print(currentCell.getNumericCellValue() + "--");
-                    }
+					Cell currentCell = cellIterator.next();
+					// getCellTypeEnum shown as deprecated for version 3.15
+					// getCellTypeEnum will be renamed to getCellType starting from version 4.0
+					if (currentCell.getCellTypeEnum() == CellType.STRING) {
+						System.out.print(currentCell.getStringCellValue() + "--");
+					} else if (currentCell.getCellTypeEnum() == CellType.NUMERIC) {
+						System.out.print(currentCell.getNumericCellValue() + "--");
+					} else if (currentCell.getCellTypeEnum() == CellType.BLANK) {
+						System.out.print(". . ." + "--");
+					}
 
-                }
-                System.out.println();
+				}
+				System.out.println();
 
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+			}
+			workbook.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-    }
+	}
+
+	public void readExcel2() {
+		try {
+			FileInputStream file = new FileInputStream(new File(FILE_NAME));
+
+			// Create Workbook instance holding reference to .xlsx file
+			XSSFWorkbook workbook = new XSSFWorkbook(file);
+
+			// Get first/desired sheet from the workbook
+			XSSFSheet sheet = workbook.getSheetAt(0);
+
+			ArrayList<CentralWareHouse> centralWareHouse = new ArrayList<>();
+
+			// I've Header and I'm ignoring header for that I've +1 in loop
+
+			for (int i = sheet.getFirstRowNum() + 1; i <= sheet.getLastRowNum(); i++) {
+				CentralWareHouse e = new CentralWareHouse();
+				Row ro = sheet.getRow(i);
+				for (int j = ro.getFirstCellNum(); j <= ro.getLastCellNum(); j++) {
+					Cell ce = ro.getCell(j);
+					if (j == 0) {
+						e.setShelfName(getStringValue(ce));
+					}
+					if (j == 1) {
+						e.setValueMetal(getStringValue(ce));
+					}
+					if (j == 2) {
+						e.setPartDescription(getStringValue(ce));
+					}
+					if (j == 3) {
+						e.setPartNumber(getStringValue(ce));
+					}
+					if (j == 4) {
+						e.setwHNumber(getStringValue(ce));
+					}
+					if (j == 5) {
+						e.setQuantity(getStringValue(ce));
+					}
+					if (j == 6) {
+						e.setbKQuantity(getStringValue(ce));
+					}
+					if (j == 7) {
+						e.setMissingQuantity(getStringValue(ce));
+					}
+					if (j == 8) {
+						e.setPlaceOfInstallation(getStringValue(ce));
+					}
+				}
+//				centralWareHouse.add(e);
+				repository.save(e);
+			}
+			for (CentralWareHouse emp : centralWareHouse) {
+				System.out.println(emp.toString());
+			}
+			file.close();
+			workbook.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private String getStringValue(Cell ce) {
+		if (ce.getCellTypeEnum() == CellType.STRING) {
+			return ce.getStringCellValue();
+		} else if (ce.getCellTypeEnum() == CellType.NUMERIC) {
+			Double d = ce.getNumericCellValue();
+			return d.toString();
+		} else if (ce.getCellTypeEnum() == CellType.BLANK | ce.getCellTypeEnum() == null) {
+			return ". . .";
+		}
+		return "no data";
+	}
 }

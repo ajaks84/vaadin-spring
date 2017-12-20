@@ -1,6 +1,5 @@
 package org.deshand.app;
 
-import org.deshand.model.Customer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -31,8 +30,8 @@ public class Application {
 	public CommandLineRunner loadData1(CentralWareHouseRepository repository) {
 		return (args) -> {
 			repository.deleteAll();
-			repository.save(new CentralWareHouse("К-04-03","no","Мотор электрический KME Engineering GmbH Unkermotoren BG65X25SI+2142DF27-1 24V, 3080 об/мин",
-			        "1058030-000-00","3452861","0","0","0","22-05-17 KDF4-1 Новик 1.07.17 KDF4 - 1"));
+//			repository.save(new CentralWareHouse("К-04-03","no","Мотор электрический KME Engineering GmbH Unkermotoren BG65X25SI+2142DF27-1 24V, 3080 об/мин",
+//			        "1058030-000-00","3452861","0","0","0","22-05-17 KDF4-1 Новик 1.07.17 KDF4 - 1"));
 			
 
 		};
@@ -41,7 +40,7 @@ public class Application {
 	@Bean
 	public CommandLineRunner readExcelData(ApachePOIExcelRead reader) {
 		return (args) -> {
-		reader.main(null);
+		reader.readExcel2();
 			
 
 		};
