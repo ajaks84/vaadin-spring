@@ -37,5 +37,14 @@ public class Application {
 
 		};
 	}
+	
+	@Bean
+	public CommandLineRunner readExcelData(ApachePOIExcelRead reader) {
+		return (args) -> {
+		reader.main(null);
+			
+
+		};
+	}
 
 }
