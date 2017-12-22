@@ -14,13 +14,14 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.deshand.model.CentralWareHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ApachePOIExcelRead {
 
-	private final String FILE_NAME = "d:/CentralWarehouse.xlsx";
+	private final String FILE_NAME = "d:/Siemens/CentralWarehouse.xlsx";
 	// private final String FILE_NAME = "d:/MyFirstExcel.xlsx";
 	
 	@Autowired

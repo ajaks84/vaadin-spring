@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
-Implementation-Title: gs-crud-with-vaadin
+Implementation-Title: vaadin-mongoDB
 Implementation-Version: 0.1.0
-Built-By: deshand
+Built-By: User
 Implementation-Vendor-Id: org.springframework
-Build-Jdk: 1.8.0_151
-Implementation-URL: http://projects.spring.io/spring-boot/gs-crud-with
- -vaadin/
+Build-Jdk: 1.8.0_152
+Implementation-URL: http://projects.spring.io/spring-boot/vaadin-mongo
+ DB/
 Created-By: Maven Integration for Eclipse
 Implementation-Vendor: Pivotal Software, Inc.
 

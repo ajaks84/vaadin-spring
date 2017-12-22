@@ -1,6 +1,6 @@
 package org.deshand.app;
 
-import org.deshand.model.Customer;
+import org.deshand.model.CentralWareHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.Binder;

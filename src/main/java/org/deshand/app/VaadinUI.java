@@ -1,6 +1,6 @@
 package org.deshand.app;
 
-import org.deshand.model.Customer;
+import org.deshand.model.CentralWareHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -15,26 +15,26 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
-//@SpringUI
-public class VaadinUI extends UI {
+@SpringUI
+public class VaadinUI extends UI{
+	
+	private final CentralWareHouseRepository repo;
 
-	private final CustomerRepository repo;
+	private final CentralWareHouseEditor editor;
 
-	private final CustomerEditor editor;
-
-	public final Grid<Customer> grid;
+	public final Grid<CentralWareHouse> grid;
 
 	final TextField filter;
 
 	private final Button addNewBtn;
-
+	
 	@Autowired
-	public VaadinUI(CustomerRepository repo, CustomerEditor editor) {
+	public VaadinUI(CentralWareHouseRepository repo, CentralWareHouseEditor editor) {
 		this.repo = repo;
 		this.editor = editor;
-		this.grid = new Grid<>(Customer.class);
+		this.grid = new Grid<>(CentralWareHouse.class);
 		this.filter = new TextField();
-		this.addNewBtn = new Button("New customer", FontAwesome.PLUS);
+		this.addNewBtn = new Button("New Entry to DB", FontAwesome.PLUS);
 	}
 
 	@Override
@@ -43,11 +43,12 @@ public class VaadinUI extends UI {
 		HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
 		VerticalLayout mainLayout = new VerticalLayout(actions, grid, editor);
 		setContent(mainLayout);
+	
+		grid.setHeight(600, Unit.PIXELS);
+		grid.setWidth(1870, Unit.PIXELS);
+		grid.setColumns("shelfName", "hasValueMetal","partDescription","partNumber","wHNumber","quantity","bKQuantity","missingQuantity","placeOfInstallation");
 
-		grid.setHeight(300, Unit.PIXELS);
-		grid.setColumns("firstName", "lastName");
-
-		filter.setPlaceholder("Filter by last name");
+		filter.setPlaceholder("Filter by part number");
 
 		// Hook logic to components
 
@@ -57,11 +58,11 @@ public class VaadinUI extends UI {
 
 		// Connect selected Customer to editor or hide if none is selected
 		grid.asSingleSelect().addValueChangeListener(e -> {
-			editor.editCustomer(e.getValue());
+			editor.editCentralWareHouse(e.getValue());
 		});
 
 		// Instantiate and edit new Customer the new button is clicked
-		addNewBtn.addClickListener(e -> editor.editCustomer(new Customer("", "")));
+		addNewBtn.addClickListener(e -> editor.editCentralWareHouse(new CentralWareHouse("","", "", "", "", "", "","", "")));
 
 		// Listen changes made by the editor, refresh data from backend
 		editor.setChangeHandler(() -> {
@@ -72,16 +73,16 @@ public class VaadinUI extends UI {
 		// Initialize listing
 		listCustomers(null);
 	}
-
+	
 	// tag::listCustomers[]
-	public void listCustomers(String filterText) {
-		if (StringUtils.isEmpty(filterText)) {
-			grid.setItems(repo.findAll());
+		public void listCustomers(String filterText) {
+			if (StringUtils.isEmpty(filterText)) {
+				grid.setItems(repo.findAll());
+			}
+			else {
+				grid.setItems(repo.findByPartNumberStartsWithIgnoreCase(filterText));
+			}
 		}
-		else {
-			grid.setItems(repo.findByLastNameStartsWithIgnoreCase(filterText));
-		}
-	}
-	// end::listCustomers[]
+		// end::listCustomers[]
 
 }
