@@ -1,4 +1,4 @@
-package org.deshand.app;
+package org.deshand.app.excel;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +14,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.deshand.model.CentralWareHouse;
+import org.deshand.app.model.CentralWareHouse;
+import org.deshand.app.repo.CentralWareHouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,7 @@
-package org.deshand.app;
+package org.deshand.app.editor;
 
-import org.deshand.model.CentralWareHouse;
+import org.deshand.app.model.CentralWareHouse;
+import org.deshand.app.repo.CentralWareHouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vaadin.data.Binder;
@@ -16,6 +17,7 @@ import com.vaadin.ui.themes.ValoTheme;
 
 @SpringComponent
 @UIScope
+@SuppressWarnings("deprecation")
 public class CentralWareHouseEditor extends VerticalLayout{
 
 	private static final long serialVersionUID = -696429844354467905L;
@@ -42,13 +44,13 @@ public class CentralWareHouseEditor extends VerticalLayout{
 	CssLayout actions = new CssLayout(save, cancel, delete);
 
 	Binder<CentralWareHouse> binder = new Binder<>(CentralWareHouse.class);
-//	Binder<Customer> binder = new Binder<>(Customer.class);
 	
 	@Autowired
 	public CentralWareHouseEditor(CentralWareHouseRepository repository) {
 		this.repository = repository;
 
-		addComponents(shelfName, hasValueMetal, partDescription, partNumber, wHNumber, quantity, bKQuantity, missingQuantity, placeOfInstallation, actions);
+		addComponents(shelfName, hasValueMetal, partDescription, partNumber, 
+				      wHNumber, quantity, bKQuantity, missingQuantity, placeOfInstallation, actions);
 
 		// bind using naming convention
 		binder.bindInstanceFields(this);
@@ -104,7 +106,5 @@ public class CentralWareHouseEditor extends VerticalLayout{
 		save.addClickListener(e -> h.onChange());
 		delete.addClickListener(e -> h.onChange());
 	}
-
-
 
 }

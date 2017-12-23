@@ -1,6 +1,8 @@
-package org.deshand.app;
+package org.deshand.app.ui;
 
-import org.deshand.model.CentralWareHouse;
+import org.deshand.app.editor.CentralWareHouseEditor;
+import org.deshand.app.model.CentralWareHouse;
+import org.deshand.app.repo.CentralWareHouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
@@ -16,8 +18,11 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @SpringUI
+@SuppressWarnings("deprecation")
 public class VaadinUI extends UI{
 	
+	private static final long serialVersionUID = -2314852980426511305L;
+
 	private final CentralWareHouseRepository repo;
 
 	private final CentralWareHouseEditor editor;
@@ -34,21 +39,22 @@ public class VaadinUI extends UI{
 		this.editor = editor;
 		this.grid = new Grid<>(CentralWareHouse.class);
 		this.filter = new TextField();
-		this.addNewBtn = new Button("New Entry to DB", FontAwesome.PLUS);
+		this.addNewBtn = new Button("Новая запись в таблицу", FontAwesome.PLUS);
 	}
 
 	@Override
 	public void init(VaadinRequest request) {
 		// build layout
 		HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
-		VerticalLayout mainLayout = new VerticalLayout(actions, grid, editor);
+		HorizontalLayout editorSpace = new HorizontalLayout(editor);
+		VerticalLayout mainLayout = new VerticalLayout(actions, grid, editorSpace);
 		setContent(mainLayout);
 	
 		grid.setHeight(600, Unit.PIXELS);
 		grid.setWidth(1870, Unit.PIXELS);
 		grid.setColumns("shelfName", "hasValueMetal","partDescription","partNumber","wHNumber","quantity","bKQuantity","missingQuantity","placeOfInstallation");
 
-		filter.setPlaceholder("Filter by part number");
+		filter.setPlaceholder("Поиск по Номеру Заказа");
 
 		// Hook logic to components
 
@@ -74,7 +80,6 @@ public class VaadinUI extends UI{
 		listCustomers(null);
 	}
 	
-	// tag::listCustomers[]
 		public void listCustomers(String filterText) {
 			if (StringUtils.isEmpty(filterText)) {
 				grid.setItems(repo.findAll());
@@ -83,6 +88,5 @@ public class VaadinUI extends UI{
 				grid.setItems(repo.findByPartNumberStartsWithIgnoreCase(filterText));
 			}
 		}
-		// end::listCustomers[]
 
 }
