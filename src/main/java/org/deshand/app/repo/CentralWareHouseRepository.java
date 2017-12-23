@@ -10,6 +10,8 @@ public interface CentralWareHouseRepository extends MongoRepository<CentralWareH
 	CentralWareHouse findById(String id);
 
 	Collection<CentralWareHouse> findByPartNumberStartsWithIgnoreCase(String filterText);
+	
+	CentralWareHouse findBypartDescriptionLike(String filterText);
 
 	
 

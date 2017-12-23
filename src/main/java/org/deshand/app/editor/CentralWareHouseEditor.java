@@ -11,6 +11,7 @@ import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
@@ -28,7 +29,7 @@ public class CentralWareHouseEditor extends VerticalLayout{
 	
 	/* Fields to edit properties in CentralWareHouse entity */
 	TextField shelfName = new TextField("Shelf Name");
-	TextField hasValueMetal = new TextField("Value Metal");  // Be careful, here is Boolean
+	TextField hasValueMetal = new TextField("Value Metal");
 	TextField partDescription = new TextField("Part Description");
 	TextField partNumber = new TextField("Part Number");
 	TextField wHNumber = new TextField("Warehouse Number");
@@ -48,9 +49,10 @@ public class CentralWareHouseEditor extends VerticalLayout{
 	@Autowired
 	public CentralWareHouseEditor(CentralWareHouseRepository repository) {
 		this.repository = repository;
+		HorizontalLayout editorSpace = new HorizontalLayout(shelfName, hasValueMetal, partDescription, partNumber, 
+			      wHNumber, quantity, bKQuantity, missingQuantity, placeOfInstallation);
 
-		addComponents(shelfName, hasValueMetal, partDescription, partNumber, 
-				      wHNumber, quantity, bKQuantity, missingQuantity, placeOfInstallation, actions);
+		addComponents(editorSpace, actions);
 
 		// bind using naming convention
 		binder.bindInstanceFields(this);

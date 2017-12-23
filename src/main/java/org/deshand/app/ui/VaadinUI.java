@@ -79,13 +79,14 @@ public class VaadinUI extends UI{
 		// Initialize listing
 		listCustomers(null);
 	}
-	
+//	https://docs.spring.io/spring-data/mongodb/docs/1.2.0.RELEASE/reference/html/mongo.repositories.html
 		public void listCustomers(String filterText) {
 			if (StringUtils.isEmpty(filterText)) {
 				grid.setItems(repo.findAll());
 			}
 			else {
 				grid.setItems(repo.findByPartNumberStartsWithIgnoreCase(filterText));
+//				grid.setItems(repo.findBypartDescriptionLike(filterText));
 			}
 		}
 
