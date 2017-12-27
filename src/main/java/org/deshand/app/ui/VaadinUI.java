@@ -6,6 +6,7 @@ import org.deshand.app.repo.CentralWareHouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
+import com.vaadin.annotations.Theme;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.ValueChangeMode;
@@ -18,9 +19,10 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @SpringUI
+@Theme("valo")
 @SuppressWarnings("deprecation")
-public class VaadinUI extends UI{
-	
+public class VaadinUI extends UI {
+
 	private static final long serialVersionUID = -2314852980426511305L;
 
 	private final CentralWareHouseRepository repo;
@@ -29,38 +31,56 @@ public class VaadinUI extends UI{
 
 	public final Grid<CentralWareHouse> grid;
 
-	final TextField filter;
+	final TextField filterByDescription;
+
+	final TextField filterByShelf;
+
+	final TextField filterByPartNumber;
 
 	private final Button addNewBtn;
-	
+
 	@Autowired
 	public VaadinUI(CentralWareHouseRepository repo, CentralWareHouseEditor editor) {
 		this.repo = repo;
 		this.editor = editor;
 		this.grid = new Grid<>(CentralWareHouse.class);
-		this.filter = new TextField();
+		this.filterByDescription = new TextField();
+		this.filterByShelf = new TextField();
+		this.filterByPartNumber = new TextField();
 		this.addNewBtn = new Button("Новая запись в таблицу", FontAwesome.PLUS);
 	}
 
 	@Override
 	public void init(VaadinRequest request) {
 		// build layout
-		HorizontalLayout actions = new HorizontalLayout(filter, addNewBtn);
+		HorizontalLayout actions = new HorizontalLayout(filterByShelf, filterByDescription, filterByPartNumber,
+				addNewBtn);
 		HorizontalLayout editorSpace = new HorizontalLayout(editor);
 		VerticalLayout mainLayout = new VerticalLayout(actions, grid, editorSpace);
 		setContent(mainLayout);
-	
+
 		grid.setHeight(600, Unit.PIXELS);
 		grid.setWidth(1870, Unit.PIXELS);
-		grid.setColumns("shelfName", "hasValueMetal","partDescription","partNumber","wHNumber","quantity","bKQuantity","missingQuantity","placeOfInstallation");
+		// grid.setHeight(300, Unit.PIXELS);
+		// grid.setWidth(970, Unit.PIXELS); //, "hasValueMetal"
+		grid.setColumns("shelfName", "partDescription", "partNumber", "wHNumber", "quantity",
+				"bKQuantity", "missingQuantity", "placeOfInstallation");
 
-		filter.setPlaceholder("Поиск по Номеру Заказа");
+		filterByShelf.setPlaceholder("Номер Полки");
+		filterByDescription.setPlaceholder("Описание");
+		filterByPartNumber.setPlaceholder("Номер Заказа");
 
 		// Hook logic to components
 
 		// Replace listing with filtered content when user changes filter
-		filter.setValueChangeMode(ValueChangeMode.LAZY);
-		filter.addValueChangeListener(e -> listCustomers(e.getValue()));
+		filterByShelf.setValueChangeMode(ValueChangeMode.LAZY);
+		filterByShelf.addValueChangeListener(e -> listEntries(e.getValue(), "shelf"));
+
+		filterByDescription.setValueChangeMode(ValueChangeMode.LAZY);
+		filterByDescription.addValueChangeListener(e -> listEntries(e.getValue(), "description"));
+
+		filterByPartNumber.setValueChangeMode(ValueChangeMode.LAZY);
+		filterByPartNumber.addValueChangeListener(e -> listEntries(e.getValue(), "partNumber"));
 
 		// Connect selected Customer to editor or hide if none is selected
 		grid.asSingleSelect().addValueChangeListener(e -> {
@@ -68,26 +88,39 @@ public class VaadinUI extends UI{
 		});
 
 		// Instantiate and edit new Customer the new button is clicked
-		addNewBtn.addClickListener(e -> editor.editCentralWareHouse(new CentralWareHouse("","", "", "", "", "", "","", "")));
+		addNewBtn.addClickListener(
+				e -> editor.editCentralWareHouse(new CentralWareHouse("", "", "", "", "", "", "", "", "")));
 
 		// Listen changes made by the editor, refresh data from backend
 		editor.setChangeHandler(() -> {
 			editor.setVisible(false);
-			listCustomers(filter.getValue());
+			listEntries(filterByDescription.getValue(), "description");
 		});
 
 		// Initialize listing
-		listCustomers(null);
+		listEntries(null, null);
 	}
-//	https://docs.spring.io/spring-data/mongodb/docs/1.2.0.RELEASE/reference/html/mongo.repositories.html
-		public void listCustomers(String filterText) {
-			if (StringUtils.isEmpty(filterText)) {
-				grid.setItems(repo.findAll());
-			}
-			else {
-				grid.setItems(repo.findByPartNumberStartsWithIgnoreCase(filterText));
-//				grid.setItems(repo.findBypartDescriptionLike(filterText));
-			}
+
+	// https://docs.spring.io/spring-data/mongodb/docs/1.2.0.RELEASE/reference/html/mongo.repositories.html
+	
+//	Try this https://github.com/basakpie/vaadin-pagination-addon
+	public void listEntries(String filterText, String option) {
+		if (StringUtils.isEmpty(filterText)) {
+			grid.setItems(repo.findAll());
+		} else if (option == "shelf") {
+			filterByPartNumber.clear();
+			filterByDescription.clear();
+			grid.setItems(repo.findByshelfNameLikeIgnoreCase(filterText));
+		} else if (option == "description") {
+			filterByPartNumber.clear();
+			filterByShelf.clear();
+			grid.setItems(repo.findBypartDescriptionLikeIgnoreCase(filterText));
+		} else if (option == "partNumber") {
+			filterByDescription.clear();
+			filterByShelf.clear();
+			grid.setItems(repo.findBypartNumberStartsWithIgnoreCase(filterText));
+
 		}
+	}
 
 }

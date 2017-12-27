@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
 public class ApachePOIExcelRead {
 
 	private final String FILE_NAME = "d:/Siemens/CentralWarehouse.xlsx";
-	// private final String FILE_NAME = "d:/MyFirstExcel.xlsx";
+//	 private final String FILE_NAME = "d:/CentralWarehouse.xlsx";
 	
 	@Autowired
 	CentralWareHouseRepository repository;
@@ -79,8 +79,6 @@ public class ApachePOIExcelRead {
 			// Get first/desired sheet from the workbook
 			XSSFSheet sheet = workbook.getSheetAt(0);
 
-			ArrayList<CentralWareHouse> centralWareHouse = new ArrayList<>();
-
 			// I've Header and I'm ignoring header for that I've +1 in loop
 
 			for (int i = sheet.getFirstRowNum() + 1; i <= sheet.getLastRowNum(); i++) {
@@ -116,12 +114,9 @@ public class ApachePOIExcelRead {
 						e.setPlaceOfInstallation(getStringValue(ce));
 					}
 				}
-//				centralWareHouse.add(e);
 				repository.save(e);
 			}
-			for (CentralWareHouse emp : centralWareHouse) {
-				System.out.println(emp.toString());
-			}
+			
 			file.close();
 			workbook.close();
 		} catch (Exception e) {
@@ -135,7 +130,8 @@ public class ApachePOIExcelRead {
 			return ce.getStringCellValue();
 		} else if (ce.getCellTypeEnum() == CellType.NUMERIC) {
 			Double d = ce.getNumericCellValue();
-			return d.toString();
+			Integer i = d.intValue();
+			return i.toString();
 		} else if (ce.getCellTypeEnum() == CellType.BLANK | ce.getCellTypeEnum() == null) {
 			return ". . .";
 		}
